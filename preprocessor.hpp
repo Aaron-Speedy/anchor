@@ -1,40 +1,53 @@
-std::vector<std::string> split(const std::string& source, const std::string& delimiters) {
-	std::size_t prev = 0;
-	std::size_t currentPos = 0;
-	std::vector<std::string> results; 
-	while ((currentPos = source.find_first_of(delimiters, prev)) != std::string::npos) {
-		if (currentPos > prev) {
-			results.push_back(source.substr(prev, currentPos - prev));
-		}
-		prev = currentPos + 1;
-	}
-	if (prev < source.length()) {
-		results.push_back(source.substr(prev));
-	}
-	return results;
-}
-void print_map(const auto& table) {
-	for (auto const & [k, v] : table) {
-		std::cout << k << " "; 
-		for(std::string str : v) {
-			std::cout << str << " ";
-		}
-		std::cout << std::endl; 
-	}
-}
-void preprocessor(std::vector<std::string> program) {
+std::vector<std::string> preprocessor(std::vector<std::string>& program) {
 	std::unordered_map<std::string, std::vector<std::string>> macros{};
-	// for(std::string temp_i : temp) {
-		// std::vector<std::string> macro = split(temp_i, {' ', '\n', '\t'});
-		// macros[macro[0]] = macro;
-	// }
+	std::unordered_map<std::string, unsigned int> labels{}; 
+	std::vector<std::string> macro_names = {};
 	std::string macro; 
-	for(std::string str : program) {
-		if(str[0] == ':') {
-			macro = str.substr(1); 
+	for(int i = 0; i < program.size(); i++) {
+		std::string str = program[i]; 
+		if(str[0] == ':') { // Macros
+			macro_names.push_back(str.substr(1)); 
+			macro = macro_names.back(); 
 			continue; 
 		}
 		macros[macro].push_back(str);
 	}
-	print_map(macros); 
+	for(std::string name : macro_names) {
+		std::vector<std::string> temp_program = {};
+		for(int i = 0; i < macros[name].size(); i++) {
+			std::string str = macros[name][i]; 
+			// logic
+			if(str[0] == '@') { // Macros
+				for(std::string macro_code : macros[str.substr(1)]) {
+					temp_program.push_back(macro_code); 
+				}
+				continue; 
+			}
+			temp_program.push_back(str); 
+		}
+		macros[name] = temp_program; 
+	}
+	// Labels
+	std::vector<std::string> final_program = {}; 
+	int label_num = 0; 
+	for(int i = 0; i < macros["main"].size(); i++) {
+		std::string str = macros["main"][i]; 
+		if(str[0] == '.') { 
+			labels[str.substr(1)] = i - label_num; 
+			label_num++; 
+			continue; 
+		}
+		final_program.push_back(str); 
+	}
+	macros["main"] = final_program; 
+	final_program = {}; 
+	for(std::string str : macros["main"]) {
+		if(str[0] == '&') {
+			final_program.push_back(std::to_string(labels[str.substr(1)])); 
+			continue; 
+		}
+		final_program.push_back(str); 
+	}
+	return final_program; 
+	// print_map(macros);
 }

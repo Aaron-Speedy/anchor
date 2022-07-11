@@ -1,5 +1,5 @@
 void run(std::vector<std::string>& program) {
-	std::stack<bool> stack = {}; 
+	std::vector<bool> stack = {}; 
 	bool a = 0; bool b = 0; 
 	bool jmp = false; 
 	for(int i = 0; i < program.size(); i++) {
@@ -11,15 +11,15 @@ void run(std::vector<std::string>& program) {
 		}
 		if(str == "pop") {
 			if(stack.size() > 0) {
-				a = stack.top(); 
-				stack.pop();
+				a = stack.back(); 
+				stack.pop_back();
 				continue; 
 			}
 			std::cout << "\nERROR: No items in stack\n"; 
 			return; 
 		}
 		if(str == "psh") {
-			stack.push(a); 
+			stack.push_back(a); 
 			continue; 
 		}
 		if(str == "swp") {
@@ -45,11 +45,11 @@ void run(std::vector<std::string>& program) {
 			continue; 
 		}
 		if(str == "1") {
-			stack.push(1); 
+			stack.push_back(1); 
 			continue; 
 		}
 		if(str == "0") {
-			stack.push(0); 
+			stack.push_back(0); 
 		}
 	}
 }
