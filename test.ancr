@@ -1,0 +1,2 @@
+:macro ?1 ?2 ;1 or ;2
+:main @macro !red !blue &LOC out pop .LOC out jmp &LOC

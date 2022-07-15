@@ -13,11 +13,8 @@ int main() {
 	std::stringstream strStream;
 	strStream << inFile.rdbuf(); 
 	std::string program_string = strStream.str(); 
-	std::vector<std::string> program = split(program_string, " \n\t"); 
-	program = preprocessor(program); 
+	std::vector<std::string> program = split(program_string, " \n\t");
+	program = preprocessor(program);
 	run(program);
-	// for(std::string str : program) {
-		// std::cout << str << " ";
-	// }
 	std::cout << std::endl;
 }

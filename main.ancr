@@ -1,1 +1,1 @@
-:main inp jmp &LOC out pop .LOC out jmp &LOC
+:main 1 pop con 

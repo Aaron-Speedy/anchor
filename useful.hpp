@@ -13,12 +13,12 @@ std::vector<std::string> split(const std::string& source, const std::string& del
 	}
 	return results;
 }
-void print_map(const auto& table) {
-	for (auto const & [k, v] : table) {
-		std::cout << k << " "; 
-		for(std::string str : v) {
-			std::cout << str << " ";
-		}
-		std::cout << std::endl; 
-	}
-}
+// void print_map(const auto& table) {
+	// for (auto const & [k, v] : table) {
+		// std::cout << k << " ";
+		// for(std::string str : v) {
+			// std::cout << str << " ";
+		// }
+		// std::cout << std::endl;
+	// }
+// }

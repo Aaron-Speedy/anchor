@@ -1,14 +1,8 @@
 void run(std::vector<std::string>& program) {
 	std::vector<bool> stack = {}; 
-	bool a = 0; bool b = 0; 
-	bool jmp = false; 
+	bool a = 0; bool b = 0; unsigned int c = 0; 
 	for(int i = 0; i < program.size(); i++) {
 		std::string str = program[i]; 
-		if(jmp) {
-			i = std::stoi(str); 
-			str = program[i]; 
-			jmp = false; 
-		}
 		if(str == "pop") {
 			if(stack.size() > 0) {
 				a = stack.back(); 
@@ -28,21 +22,24 @@ void run(std::vector<std::string>& program) {
 			b = a_temp; 
 			continue; 
 		}
-		if(str == "out") {
-			std::cout << a; 
-			continue; 
-		}
 		if(str == "inp") {
 			char a_char; 
 			std::cin >> a_char; 
-			a = a_char - 48; 
+			a = a_char - 48; 		
 			continue; 
 		}
-		if(str == "jmp") {
-			if(a) {
-				jmp = true; 
+		if(str == "out") {
+			std::cout << a; 
+			continue;
+		}
+		if(str == "con") {
+			if(!a) {
+				if(c != 0) {
+					c--;
+				}
+				continue; 
 			}
-			continue; 
+			c++; continue;  
 		}
 		if(str == "1") {
 			stack.push_back(1); 
@@ -50,6 +47,17 @@ void run(std::vector<std::string>& program) {
 		}
 		if(str == "0") {
 			stack.push_back(0); 
+			continue; 
+		}
+		if(str.size() > 4 && split(str, "-")[0] == "jmp") {
+			if(c == 0) {
+				std::vector<std::string> split_jmp = split(str, "-"); 
+				if(split_jmp[1] == "#") {
+					i = c - 1; continue;
+				}
+				i = std::stoi(split_jmp[1]) - 1; continue;
+			}
+			continue; 
 		}
 	}
 }
